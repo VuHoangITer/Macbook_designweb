@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết sản phẩm</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
+    <style>
+      .product-card {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+      }
+      .product-card img {
+        width: 300px;
+        height: auto;
+        margin-right: 20px;
+      }
+      .product-card .card-body {
+        flex-grow: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div id="product-details"></div>
+    </div>
+
+    <script>
+      // Danh sách sản phẩm giả định
+      var products = [
+        {
+          id: 1,
+          name: "I/O Board MacBook Air 13inch A1466 Mid",
+          price: 650000,
+          img: "assets/images/i-o-board-macbook-air-650000vnd-570x740.jpg",
+          description:
+            "I/O Board cho MacBook Air 13inch A1466 Mid. Đảm bảo kết nối chính xác cho các thiết bị ngoại vi và các thành phần nội bộ. Đây là một phần thay thế chất lượng cao, giúp duy trì hiệu suất tốt nhất cho MacBook của bạn.",
+          warranty: "Bảo hành 1 đổi 1 trong 30 ngày",
+          discount: "33%",
+          brand: "Apples",
+          originalPrice: 970000,
+        },
+        {
+          id: 2,
+          name: "Cáp pin Macbook Pro 16inch 2021 A2485",
+          price: 300000,
+          img: "assets/images/cable-pin-macbook-pro-16inch-m1-2021-300000vnd-570x740.jpg",
+          description:
+            "Cáp pin cho Macbook Pro 16inch 2021 A2485. Dây cáp thay thế chất lượng cao, đảm bảo cung cấp năng lượng ổn định và đáng tin cậy cho máy tính xách tay của bạn.",
+          warranty: "Bảo hành 1 đổi 1 trong 30 ngày",
+          discount: "15%",
+          brand: "Apples",
+          originalPrice: 350000,
+        },
+        {
+          id: 3,
+          name: "Ron viền màn hình macbook air 2020, M1 13inch",
+          price: 150000,
+          img: "assets/images/ron-cao-su-man-hinh-macbook-a2179-150000vnd-570x740.jpg",
+          description:
+            "Ron viền cao su cho màn hình MacBook Air 2020, M1 13inch. Giúp bảo vệ màn hình khỏi bụi bẩn và va đập, cải thiện độ bền của thiết bị.",
+          warranty: "Bảo hành 1 đổi 1 trong 30 ngày",
+          discount: "20%",
+          brand: "Apples",
+          originalPrice: 180000,
+        },
+        {
+          id: 4,
+          name: "Magic keyboard",
+          price: 4701000,
+          img: "assets/images/magic-keyboard-532x582.png",
+          description:
+            "Magic Keyboard mang lại trải nghiệm gõ phím tuyệt vời với cảm giác thoải mái và yên tĩnh. Thiết kế tinh tế, không dây và tích hợp pin sạc lâu dài.",
+          warranty: "Bảo hành 1 đổi 1 trong 30 ngày",
+          discount: "25%",
+          brand: "Apples",
+          originalPrice: 6270000,
+        },
+        {
+          id: 5,
+          name: "Magic trackpad",
+          price: 3500000,
+          img: "assets/images/magic-trackpad-532x582.png",
+          description:
+            "Magic Trackpad với công nghệ Force Touch mang lại trải nghiệm điều khiển mượt mà và chính xác. Thiết kế không dây, hiện đại và pin sạc lâu dài.",
+          warranty: "Bảo hành 1 đổi 1 trong 30 ngày",
+          discount: "30%",
+          brand: "Apples",
+          originalPrice: 5000000,
+        },
+        {
+          id: 6,
+          name: "Magic mouse",
+          price: 42333000,
+          img: "assets/images/magic-mouse-532x582.png",
+          description:
+            "Magic Mouse với thiết kế hiện đại và cảm ứng đa điểm, cho phép thao tác mượt mà và chính xác. Pin sạc tích hợp, không dây và tiện dụng.",
+          warranty: "Bảo hành 1 đổi 1 trong 30 ngày",
+          discount: "28%",
+          brand: "Apples",
+          originalPrice: 59000000,
+        },
+        {
+          id: 7,
+          name: "Cáp chuyển từ usb-c sang Magsafe 3",
+          price: 111110,
+          img: "assets/images/sac-l-532x582.png",
+          description:
+            "Cáp chuyển đổi từ USB-C sang MagSafe 3 giúp kết nối và sạc các thiết bị Apple một cách nhanh chóng và an toàn. Thiết kế nhỏ gọn và bền bỉ.",
+          warranty: "Bảo hành 1 đổi 1 trong 30 ngày",
+          discount: "35%",
+          brand: "Apples",
+          originalPrice: 170000,
+        },
+        {
+          id: 8,
+          name: "Usb-c digital Av",
+          price: 2100980,
+          img: "assets/images/sac-m-532x582.png",
+          description:
+            "USB-C Digital AV Multiport Adapter cho phép bạn kết nối MacBook với màn hình HDMI, USB-A và USB-C. Đa năng và tiện dụng cho công việc và giải trí.",
+          warranty: "Bảo hành 1 đổi 1 trong 30 ngày",
+          discount: "18%",
+          brand: "Apples",
+          originalPrice: 2560000,
+        },
+        {
+          id: 9,
+          name: "Cáp chuyển usb sang usb-c",
+          price: 2123009,
+          img: "assets/images/sac-t-532x582.png",
+          description:
+            "Cáp chuyển đổi từ USB-A sang USB-C giúp kết nối các thiết bị cũ với máy tính và thiết bị mới hỗ trợ USB-C. Chất lượng cao và bền bỉ.",
+          warranty: "Bảo hành 1 đổi 1 trong 30 ngày",
+          discount: "20%",
+          brand: "Apples",
+          originalPrice: 2653761,
+        },
+        {
+          id: 10,
+          name: "Airpods Pro Gen2",
+          price: 33900000,
+          img: "assets/images/amthanh-m-532x582.png",
+          description:
+            "AirPods Pro Gen 2 với tính năng chống ồn chủ động, chế độ Transparency và âm thanh chất lượng cao. Thiết kế thoải mái và thời lượng pin dài.",
+          warranty: "Bảo hành 1 đổi 1 trong 30 ngày",
+          discount: "25%",
+          brand: "Apples",
+          originalPrice: 45200000,
+        },
+        {
+          id: 11,
+          name: "AirpodMax Bạc",
+          price: 13000000000,
+          img: "assets/images/anhthanh-l-532x582.png",
+          description:
+            "AirPods Max với chất lượng âm thanh vượt trội, chống ồn chủ động và thiết kế cao cấp. Thời lượng pin dài và trải nghiệm nghe nhạc tuyệt vời.",
+          warranty: "Bảo hành 1 đổi 1 trong 30 ngày",
+          discount: "15%",
+          brand: "Apples",
+          originalPrice: 15300000000,
+        },
+        {
+          id: 12,
+          name: "Airpod Gen3 Sạc Lightning",
+          price: 30920392,
+          img: "assets/images/amthanh-x-532x582.png",
+          description:
+            "AirPods Gen 3 với thiết kế cải tiến, âm thanh chất lượng cao và thời lượng pin lâu dài. Sạc nhanh qua cổng Lightning và kết nối dễ dàng.",
+          warranty: "Bảo hành 1 đổi 1 trong 30 ngày",
+          discount: "22%",
+          brand: "Apples",
+          originalPrice: 39672000,
+        },
+      ];
+
+      // Lấy ID sản phẩm từ URL
+      function getProductIdFromUrl() {
+        var params = new URLSearchParams(window.location.search);
+        return parseInt(params.get("id"));
+      }
+
+      // Hiển thị chi tiết sản phẩm
+      function displayProductDetails(productId) {
+        var product = products.find(function (p) {
+          return p.id === productId;
+        });
+
+        if (product) {
+          var productDetails = document.getElementById("product-details");
+          productDetails.innerHTML = `
+                    <div class="card product-card">
+                        <img src="${product.img}" class="card-img-top" alt="${
+            product.name
+          }">
+                        <div class="card-body">
+                            <h5 class="card-title">${product.name}</h5>
+                            <p class="card-text">Giá: ${product.price.toLocaleString()} VND</p>
+                            <p class="card-text">${product.description}</p>
+                            <p class="card-text"><strong>Giá: ${
+                              product.price
+                            } VND</strong></p>
+                            <p class="card-text"><strong>Giá gốc: ${
+                              product.originalPrice
+                            } VND</strong></p>
+                            <p class="card-text"><strong>Giảm giá: ${
+                              product.discount
+                            }</strong></p>
+                            <p class="card-text"><strong>Thương hiệu: ${
+                              product.brand
+                            }</strong></p>
+                            <p class="card-text"><strong>${
+                              product.warranty
+                            }</strong></p>
+                            <button class="btn btn-primary" onclick="addToCart(${
+                              product.id
+                            })">Thêm vào giỏ hàng</button>
+                        </div>
+                    </div>
+                `;
+        } else {
+          productDetails.innerHTML = "<p>Không tìm thấy sản phẩm</p>";
+        }
+      }
+
+      // Hàm thêm sản phẩm vào giỏ
+      function addToCart(productId) {
+        var product = products.find(function (product) {
+          return product.id === productId;
+        });
+        if (product) {
+          var cart = JSON.parse(localStorage.getItem("cart")) || [];
+          cart.push(product);
+          localStorage.setItem("cart", JSON.stringify(cart));
+          alert("Sản phẩm đã được thêm vào giỏ hàng!");
+          window.location.href = "sanpham.html"; // Chuyển hướng đến trang danh sách sản phẩm
+        }
+      }
+
+      // Hàm mua ngay
+      function buyNow(productId) {
+        addToCart(productId);
+        window.location.href = "cart.html"; // Chuyển hướng đến trang giỏ hàng
+      }
+
+      var productId = getProductIdFromUrl();
+      displayProductDetails(productId);
+    </script>
+  </body>
+</html>

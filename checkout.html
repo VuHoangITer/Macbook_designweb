@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang Thanh Toán</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h2 class="text-center">Thanh Toán</h2>
+      <form id="payment-form">
+        <div class="form-group">
+          <label for="firstName">Họ</label>
+          <input
+            type="text"
+            class="form-control"
+            id="firstName"
+            placeholder="Nhập họ"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="lastName">Tên</label>
+          <input
+            type="text"
+            class="form-control"
+            id="lastName"
+            placeholder="Nhập tên"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="phoneNumber">Số Điện Thoại</label>
+          <input
+            type="tel"
+            class="form-control"
+            id="phoneNumber"
+            placeholder="Nhập số điện thoại"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="address">Địa Chỉ</label>
+          <input
+            type="text"
+            class="form-control"
+            id="address"
+            placeholder="Nhập địa chỉ"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="card-element">Thẻ Tín Dụng hoặc Ghi Nợ</label>
+          <div id="card-element">
+            <!-- Stripe Element sẽ được chèn vào đây. -->
+          </div>
+          <!-- Dùng để hiển thị lỗi. -->
+          <div id="card-errors" role="alert"></div>
+        </div>
+        <button class="btn btn-primary btn-block mt-3">Thanh Toán</button>
+      </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+      var stripe = Stripe("YOUR_PUBLISHABLE_KEY");
+      var elements = stripe.elements();
+      var card = elements.create("card");
+      card.mount("#card-element");
+
+      card.on("change", function (event) {
+        var displayError = document.getElementById("card-errors");
+        if (event.error) {
+          displayError.textContent = event.error.message;
+        } else {
+          displayError.textContent = "";
+        }
+      });
+
+      var form = document.getElementById("payment-form");
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        var firstName = document.getElementById("firstName").value;
+        var lastName = document.getElementById("lastName").value;
+        var phoneNumber = document.getElementById("phoneNumber").value;
+        var address = document.getElementById("address").value;
+
+        if (!firstName || !lastName || !phoneNumber || !address) {
+          alert("Vui lòng điền đầy đủ thông tin.");
+          return;
+        }
+
+        stripe.createToken(card).then(function (result) {
+          if (result.error) {
+            var errorElement = document.getElementById("card-errors");
+            errorElement.textContent = result.error.message;
+          } else {
+            stripeTokenHandler(result.token);
+          }
+        });
+      });
+
+      function stripeTokenHandler(token) {
+        var form = document.getElementById("payment-form");
+        var hiddenInputToken = document.createElement("input");
+        hiddenInputToken.setAttribute("type", "hidden");
+        hiddenInputToken.setAttribute("name", "stripeToken");
+        hiddenInputToken.setAttribute("value", token.id);
+
+        var hiddenInputFirstName = document.createElement("input");
+        hiddenInputFirstName.setAttribute("type", "hidden");
+        hiddenInputFirstName.setAttribute("name", "firstName");
+        hiddenInputFirstName.setAttribute(
+          "value",
+          document.getElementById("firstName").value
+        );
+
+        var hiddenInputLastName = document.createElement("input");
+        hiddenInputLastName.setAttribute("type", "hidden");
+        hiddenInputLastName.setAttribute("name", "lastName");
+        hiddenInputLastName.setAttribute(
+          "value",
+          document.getElementById("lastName").value
+        );
+
+        var hiddenInputPhoneNumber = document.createElement("input");
+        hiddenInputPhoneNumber.setAttribute("type", "hidden");
+        hiddenInputPhoneNumber.setAttribute("name", "phoneNumber");
+        hiddenInputPhoneNumber.setAttribute(
+          "value",
+          document.getElementById("phoneNumber").value
+        );
+
+        var hiddenInputAddress = document.createElement("input");
+        hiddenInputAddress.setAttribute("type", "hidden");
+        hiddenInputAddress.setAttribute("name", "address");
+        hiddenInputAddress.setAttribute(
+          "value",
+          document.getElementById("address").value
+        );
+
+        form.appendChild(hiddenInputToken);
+        form.appendChild(hiddenInputFirstName);
+        form.appendChild(hiddenInputLastName);
+        form.appendChild(hiddenInputPhoneNumber);
+        form.appendChild(hiddenInputAddress);
+
+        form.submit();
+      }
+    </script>
+  </body>
+</html>
